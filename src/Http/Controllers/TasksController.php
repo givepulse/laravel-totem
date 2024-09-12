@@ -132,7 +132,6 @@ class TasksController extends Controller
         $task = $this->tasks->update($request->all(), $task);
 
         return redirect()->route('totem.task.view', $task)
-            ->with('task', $task)
             ->with('success', trans('totem::messages.success.update'));
     }
 

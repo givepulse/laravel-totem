@@ -14,7 +14,7 @@ class Executed extends BroadcastingEvent
      * @param  string|float|int  $started
      * @param  $output
      */
-    public function __construct(Task $task, $started, $output)
+    public function __construct(Task $task, protected $started, protected $output)
     {
         parent::__construct($task);
 
@@ -22,10 +22,20 @@ class Executed extends BroadcastingEvent
 
         $task->results()->create([
             'duration' => $time_elapsed_secs * 1000,
-            'result' => $output,
+            'result'   => $output,
         ]);
 
         $task->notify(new TaskCompleted($output));
         $task->autoCleanup();
+    }
+
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    public function getStarted(): float|int|string
+    {
+        return $this->started;
     }
 }
